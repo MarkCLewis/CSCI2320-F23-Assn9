@@ -31,13 +31,60 @@ public class TrieSet implements Iterable<String> {
     throw new UnsupportedOperationException();
   }
 
+  // I'm giving you this iterator because you didn't really want to write one yourself.
+  // private class TrieIterator implements Iterator<String> {
+  //   private StringBuilder prefix = new StringBuilder();
+  //   private Stack<Iterator<Map.Entry<Character, Node>>> stack = new Stack<>();
+
+  //   public TrieIterator() {
+  //     pushFirst(root);
+  //   }
+
+  //   private void pushFirst(Node n) {
+  //     var iter = n.children.entrySet().iterator();
+  //     stack.push(iter);
+  //     if (!n.keyNode) {
+  //       var entry = iter.next();
+  //       prefix.append(entry.getKey().charValue());
+  //       pushFirst(entry.getValue());
+  //     }
+  //   }
+
+  //   private void advance() {
+  //     if (stack.peek().hasNext()) {
+  //       var iter = stack.peek();
+  //       var entry = iter.next();
+  //       prefix.append(entry.getKey().charValue());
+  //       pushFirst(entry.getValue());
+  //     } else {
+  //       stack.pop();
+  //       if (!stack.isEmpty()) {
+  //         prefix.deleteCharAt(prefix.length() - 1);
+  //         advance();
+  //       }
+  //     }
+  //   }
+
+  //   @Override
+  //   public boolean hasNext() {
+  //     return !stack.isEmpty();
+  //   }
+
+  //   @Override
+  //   public String next() {
+  //     var ret = prefix.toString();
+  //     advance();
+  //     return ret;
+  //   }
+  // }
+
   /**
    * Returns an iterator that goes through this set.
    */
   @Override
   public Iterator<String> iterator() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+    // return new TrieIterator();
+    throw new UnsupportedOperationException();
   }
 
   /**
