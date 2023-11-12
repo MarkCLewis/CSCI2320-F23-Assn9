@@ -1,7 +1,7 @@
 package csci2320;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 public class TrieSet implements Iterable<String> {
   // TODO: Add your Node and private data here.
@@ -51,9 +51,10 @@ public class TrieSet implements Iterable<String> {
   /**
    * Returns a list of all suffixes of the given string for strings in the set. Only return the
    * suffix, not the complete word. So if "valid" is in the set and the string is "val" then
-   * "id" should be in the returned list.
+   * "id" should be in the returned list. If the prefix is valid, the return set should include
+   * the empty string.
    */
-  public List<String> validSuffixes(String str) {
+  public Set<String> validSuffixes(String str) {
     // TODO: Implement this.
     throw new UnsupportedOperationException();
   }

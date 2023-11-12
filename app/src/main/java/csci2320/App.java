@@ -63,12 +63,14 @@ public class App {
     }
     
     static void contains(Random rand, TrieSet set, List<String> words) {
+        System.out.println("Start contains test.");
         for (var word: words) {
             if (!set.contains(word)) {
                 System.out.println("Didn't find " + word);
                 return;
             }
         }
+        System.out.println("Existing words found.");
         for (int i = 0; i < 10; ++i) {
             String newWord = randomString(rand, 5 + rand.nextInt(4));
             while (words.contains(newWord)) {
@@ -76,12 +78,16 @@ public class App {
             }
             if (set.contains(newWord)) {
                 System.out.println("Found " + newWord + " that isn't there.");
+                return;
             }
         }
+        System.out.println("Contains passed: " + words.size());
     }
 
     static void remove(Random rand, TrieSet set, List<String> words) {
+        System.out.println("Start remove test.");
         List<String> removed = new ArrayList<>();
+        var cnt = 0;
         for (var word: words) {
             if (rand.nextDouble() < 0.4) {
                 if (!set.contains(word)) {
@@ -89,20 +95,37 @@ public class App {
                     return;
                 }
                 removed.add(word);
-                set.remove(word);
+                if (!set.remove(word)) {
+                    System.out.println("Remove returned false when it should have worked.");
+                    return;
+                }
+                ++cnt;
             }
         }
+        System.out.println("Removals complete.");
         for (var word: removed) {
             if (set.contains(word)) {
                 System.out.println("After removal we found " + word);
+                return;
             }
         }
+        System.out.println("Removed items not found. " + cnt);
     }
 
     static void iterator(Random rand, TrieSet set, List<String> words) {
+        System.out.println("Start iterator test.");
         Set<String> wordSet = new HashSet<>(words);
         Set<String> trieSet = new HashSet<>();
-        for (var word: set) trieSet.add(word);
+        var cnt = 0;
+        for (var word: set) {
+            trieSet.add(word);
+            ++cnt;
+        }
+        System.out.println("Iterator: " + cnt);
+        if (cnt != words.size()) {
+            System.out.println("Iterator coutn wrong.");
+            return;
+        }
         if (!wordSet.equals(trieSet)) {
             System.out.println("Iterator didn't get all values: " + words.size() + " != " + trieSet.size());
         }
@@ -110,6 +133,8 @@ public class App {
     }
 
     static void prefix(Random rand, TrieSet set, List<String> words) {
+        System.out.println("Start prefix test.");
+        var cnt = 0;
         for (var word: words) {
             if (rand.nextDouble() < 0.4) {
                 var newWord = word + randomString(rand, 3);
@@ -122,25 +147,33 @@ public class App {
                     System.out.println("Got a prefix that isn't in the list of words. " + prefix);
                     return;
                 }
+                ++cnt;
             }
         }
+        System.out.println("Prefix tests passed. " + cnt);
     }
 
     static void suffix(Random rand, TrieSet set, List<String> words) {
+        System.out.println("Start suffix test.");
+        var cnt = 0;
         for (int i = 0; i < words.size() / 5; ++i) {
             var word = words.get(i);
             var prefix = word.substring(0, word.length() - 3);
             var suffixes = set.validSuffixes(prefix);
             if (!suffixes.contains(word.substring(prefix.length()))) {
                 System.out.println("Original not found in suffixes.");
+                return;
             }
             for (var w: words) {
                 if (w.startsWith(prefix)) {
+                    ++cnt;
                     if (!suffixes.contains(word.substring(prefix.length()))) {
                         System.out.println("Didn't get suffix of " + w + " with prefix of " + prefix);
+                        return;
                     }
                 }
             }
         }
+        System.out.println("Suffix tests passed. " + cnt);
     }
 }
