@@ -15,28 +15,35 @@ public class App {
 
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
-            long seed = sc.nextLong();
-            Random rand = new Random(seed);
-            int size = sc.nextInt();
-            var slp = buildSet(rand, size);
-            TrieSet set = slp.set;
-            List<String> words = slp.list;
-            String type = sc.next();
-            switch(type) {
-                case "contains":
-                    contains(rand, set, words);
+            String testType = sc.next();
+            if (testType.equals("speed")) {
+                speed(1000000);
+                return;
+            }
+            Random rand = new Random(sc.nextLong());
+            int size1 = sc.nextInt();
+            int size2 = sc.nextInt();
+
+            var slp1 = buildSet(rand, size1);
+            TrieSet set1 = slp1.set;
+            List<String> words1 = slp1.list;
+            var slp2 = buildSet(rand, size2);
+            TrieSet set2 = slp2.set;
+            List<String> words2 = slp2.list;
+            switch(testType) {
+                case "basic":
+                    contains(rand, set1, words1);
+                    iterator(rand, set1, words1);
+                    remove(rand, set1, words1);
+                    contains(rand, set2, words2);
+                    iterator(rand, set2, words2);
+                    remove(rand, set2, words2);
                     break;
-                case "remove":
-                    remove(rand, set, words);
-                    break;
-                case "iterator":
-                    iterator(rand, set, words);
-                    break;
-                case "prefix":
-                    prefix(rand, set, words);
-                    break;
-                case "suffix":
-                    suffix(rand, set, words);
+                case "pre-suffix":
+                    prefix(rand, set1, words1);
+                    suffix(rand, set1, words1);
+                    prefix(rand, set2, words2);
+                    suffix(rand, set2, words2);
                     break;
             }
         }
@@ -123,7 +130,7 @@ public class App {
         }
         System.out.println("Iterator: " + cnt);
         if (cnt != words.size()) {
-            System.out.println("Iterator coutn wrong.");
+            System.out.println("Iterator count wrong.");
             return;
         }
         if (!wordSet.equals(trieSet)) {
@@ -175,5 +182,26 @@ public class App {
             }
         }
         System.out.println("Suffix tests passed. " + cnt);
+    }
+
+    static void speed(int size) {
+        var start = System.nanoTime();
+        Random rand = new Random(45283);
+        var slp = buildSet(rand, size);
+        TrieSet set = slp.set;
+        List<String> words = slp.list;
+
+        contains(rand, set, words);
+        System.out.println("First time: " + (System.nanoTime() - start)*1e-9);
+        remove(rand, set, words);
+        System.out.println("Second time: " + (System.nanoTime() - start)*1e-9);
+
+        var slp2 = buildSet(rand, size / 20);
+        TrieSet set2 = slp2.set;
+        List<String> words2 = slp2.list;
+        prefix(rand, set2, words2);
+        System.out.println("Third time: " + (System.nanoTime() - start)*1e-9);
+        suffix(rand, set2, words2);
+        System.out.println("Final time: " + (System.nanoTime() - start)*1e-9);
     }
 }
